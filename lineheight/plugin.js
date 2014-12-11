@@ -60,5 +60,7 @@
             };
         });
     });
+
+    tinymce.PluginManager.requireLangPack('lineheight', 'de');
 })(tinymce);
 
