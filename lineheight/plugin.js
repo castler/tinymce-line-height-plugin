@@ -1,66 +1,55 @@
-(function (tinymce) {
-    tinymce.PluginManager.add('lineheight', function (editor, url, $) {
+!(function() {
+  'use strict';
 
-        editor.on('init', function () {
-            editor.formatter.register({
-                lineheight: {inline: 'span', styles: {'line-height': '%value'}}
-            });
-        });
+  /* eslint-disable no-undef */
+  const global = tinymce.util.Tools.resolve('tinymce.PluginManager');
+  global.add('lineheight', function(editor) {
+    editor.on('init', function() {
+      editor.formatter.register({
+        lineheight: {
+          selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table',
+          styles: { 'line-height': '%value' }
+        }
+      });
 
-        editor.addButton('lineheightselect', function() {
-            var items = [], defaultLineHeightFormats = '8pt 10pt 12pt 14pt 18pt 24pt 36pt';
-            var lineheight_formats = editor.settings.lineheight_formats || defaultLineHeightFormats;
-            lineheight_formats.split(' ').forEach(function(item) {
-                var text = item, value = item;
-                // Allow text=value for line-height formats
-                var values = item.split('=');
-                if (values.length > 1) {
-                    text = values[0];
-                    value = values[1];
-                }
-                items.push({text: text, value: value});
-            });
-            return {
-                type: 'listbox',
-                text: 'Line Height',
-                tooltip: 'Line Height',
-                values: items,
-                fixedWidth: true,
-                onPostRender: function() {
-                    var self = this;
-                    editor.on('nodeChange', function(e) {
-                        var formatName = 'lineheight';
-                        var formatter = editor.formatter;
-                        var value = null;
-                        e.parents.forEach(function(node) {
-                            items.forEach(function(item) {
-                                if (formatName) {
-                                    if (formatter.matchNode(node, formatName, {value: item.value})) {
-                                        value = item.value;
-                                    }
-                                } else {
-                                    if (formatter.matchNode(node, item.value)) {
-                                        value = item.value;
-                                    }
-                                }
-                                if (value) {
-                                    return false;
-                                }
-                            });
-                            if (value) {
-                                return false;
-                            }
-                        });
-                        self.value(value);
-                    });
-                },
-                onselect: function(e) {
-                    tinymce.activeEditor.formatter.apply('lineheight', {value : this.value()});
-                }
-            };
-        });
+      editor.ui.registry.addIcon(
+        'line-height',
+        `
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M9.984 12.984v-1.969h12v1.969h-12zM9.984 18.984v-1.969h12v1.969h-12zM9.984 5.016h12v1.969h-12v-1.969zM6 6.984v10.031h2.484l-3.469 3.469-3.516-3.469h2.484v-10.031h-2.484l3.516-3.469 3.469 3.469h-2.484z"></path>
+          </svg>
+        `
+      );
     });
 
-    tinymce.PluginManager.requireLangPack('lineheight', 'de');
-})(tinymce);
+    editor.ui.registry.addMenuButton('lineheightselect', {
+      tooltip: 'Line height',
+      icon: 'line-height',
+      fetch: function(callback) {
+        const defaultLineHeightFormats = '1 1.5 1.75 2 3 4 5';
+        const userSettings = editor.settings.lineheight_formats;
+        const lineheightFormats = typeof userSettings === 'string' ? userSettings : defaultLineHeightFormats;
 
+        const items = lineheightFormats.split(' ').map(item => {
+          let text = item,
+            value = item;
+          const values = item.split('=');
+          if (values.length > 1) {
+            [text, value] = values;
+          }
+
+          return {
+            type: 'menuitem',
+            text: text,
+            onAction: function() {
+              editor.formatter.apply('lineheight', { value: value });
+              editor.fire('change', {});
+            }
+          };
+        });
+
+        callback(items);
+      }
+    });
+  });
+})();
