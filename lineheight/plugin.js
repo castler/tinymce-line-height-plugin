@@ -11,16 +11,16 @@
           styles: { 'line-height': '%value' }
         }
       });
-
-      editor.ui.registry.addIcon(
-        'line-height',
-        `
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-            <path d="M9.984 12.984v-1.969h12v1.969h-12zM9.984 18.984v-1.969h12v1.969h-12zM9.984 5.016h12v1.969h-12v-1.969zM6 6.984v10.031h2.484l-3.469 3.469-3.516-3.469h2.484v-10.031h-2.484l3.516-3.469 3.469 3.469h-2.484z"></path>
-          </svg>
-        `
-      );
     });
+
+    editor.ui.registry.addIcon(
+      'line-height',
+      `<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+          <g id="Icons/20px//editor/line-" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <path d="M17,16 L17,17 L6,17 L6,16 L17,16 Z M2.999,6 L2,6 L3.5,4 L5,6 L3.999,6 L4,15 L5,15 L3.5,17 L2,15 L3,15 L2.999,6 Z M17,14 L17,15 L6,15 L6,14 L17,14 Z M17,12 L17,13 L6,13 L6,12 L17,12 Z M17,10 L17,11 L6,11 L6,10 L17,10 Z M17,8 L17,9 L6,9 L6,8 L17,8 Z M17,6 L17,7 L6,7 L6,6 L17,6 Z M17,4 L17,5 L6,5 L6,4 L17,4 Z" fill="#575E62"></path>
+          </g>
+      </svg>`
+    );
 
     editor.ui.registry.addMenuButton('lineheightselect', {
       tooltip: 'Line height',
